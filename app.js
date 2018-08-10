@@ -57,23 +57,27 @@ var liveOrDie = function (numberOfLivingNeighbors, currentVitality) {
    }
 };
 
-var updateBoard = function (x, y, liveOrDie, arr) {
-    arr[x][y] = liveOrDie;
-    return arr;
+var updateBoard = function (x, y, liveOrDie, newBoard) {
+    if (!newBoard[x]) {
+        newBoard.push([]);
+    }
+    newBoard[x][y] = liveOrDie;
+    return newBoard;
 };
 
 var game = function (arr) {
     console.log(arr);
+    var newBoard = [];
     for (var x = 0; x < arr.length; x++) {
         for (var y = 0; y < arr[0].length; y++) {
             var currentVitality = arr[x][y]
             var numberOfLivingNeighbors = numNeighbors(x, y, arr)
             var newVitality = liveOrDie(numberOfLivingNeighbors, currentVitality)
-            var newBoard = updateBoard(x, y, newVitality, arr);
+            updateBoard(x, y, newVitality, newBoard);
         }
     }
     console.log(newBoard);
-    return newBoard;
+    // return newBoard;
 };
 
 // console.assert(liveOrDie(2, true) === true, "If the current target has two living neighbors and is alive, it should return true");
