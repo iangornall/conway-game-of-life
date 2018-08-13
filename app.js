@@ -1,45 +1,14 @@
 var numNeighbors = function (x, y, arr) {
     var totalLivingNeighbors = 0;
-    if (x - 1 >= 0) {
-        if (y - 1 >= 0) {
-            if (arr[x - 1][y - 1]) {
+    var offsets = [-1, 0, 1];
+    offsets.forEach(xOffset => {
+        offsets.forEach(yOffset => {
+            if (!(yOffset === 0 && xOffset === 0) &&
+            (arr[x + xOffset] || [])[y + yOffset]) {
                 totalLivingNeighbors++;
             }
-        }
-        if (arr[x - 1][y]) {
-            totalLivingNeighbors++;
-        }
-        if (y + 1 < arr[0].length) {
-            if(arr[x - 1][y + 1]) {
-                totalLivingNeighbors++;
-            }
-        }
-    }
-    if (y - 1 >= 0) {
-        if (arr[x][y - 1]) {
-            totalLivingNeighbors++;
-        }
-    }
-    if (y + 1 < arr[0].length) {
-        if(arr[x][y + 1]) {
-            totalLivingNeighbors++;
-        }
-    }
-    if (x + 1 < arr.length) {
-        if (y - 1 >= 0) {
-            if (arr[x + 1][y - 1]) {
-                totalLivingNeighbors++;
-            }
-        }
-        if (arr[x + 1][y]) {
-            totalLivingNeighbors++;
-        }
-        if (y + 1 < arr[0].length) {
-            if(arr[x + 1][y + 1]) {
-                totalLivingNeighbors++;
-            }
-        }
-    }
+        })
+    })
     return totalLivingNeighbors;
 }
 
