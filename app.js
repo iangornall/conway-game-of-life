@@ -19,7 +19,8 @@ var numNeighbors = function (x, y, arr) {
 
 
 var liveOrDie = function (numberOfLivingNeighbors, currentVitality) {
-    return numberOfLivingNeighbors === 3 || (currentVitality === true && numberOfLivingNeighbors === 2);
+    return numberOfLivingNeighbors === 3 || 
+        (currentVitality && numberOfLivingNeighbors === 2);
 };
 
 var updateBoard = function (x, y, liveOrDie, newBoard) {
@@ -30,20 +31,32 @@ var updateBoard = function (x, y, liveOrDie, newBoard) {
     return newBoard;
 };
 
-var game = function (arr) {
+// var game = function (arr) {
+//     console.log(arr);
+//     var newBoard = [];
+//     for (var x = 0; x < arr.length; x++) {
+//         for (var y = 0; y < arr[0].length; y++) {
+//             var currentVitality = arr[x][y]
+//             var numberOfLivingNeighbors = numNeighbors(x, y, arr)
+//             var newVitality = liveOrDie(numberOfLivingNeighbors, currentVitality)
+//             updateBoard(x, y, newVitality, newBoard);
+//         }
+//     }
+//     console.log(newBoard);
+//     // return newBoard;
+// };
+
+var game = function(arr) {
     console.log(arr);
-    var newBoard = [];
-    for (var x = 0; x < arr.length; x++) {
-        for (var y = 0; y < arr[0].length; y++) {
-            var currentVitality = arr[x][y]
-            var numberOfLivingNeighbors = numNeighbors(x, y, arr)
-            var newVitality = liveOrDie(numberOfLivingNeighbors, currentVitality)
-            updateBoard(x, y, newVitality, newBoard);
-        }
-    }
-    console.log(newBoard);
-    // return newBoard;
-};
+    var newArr = arr.map(function(row, y) {
+        return row.map(function(currentVitality, x){
+            var numberOfLivingNeighbors = numNeighbors(y, x, arr);
+            return liveOrDie(numberOfLivingNeighbors, currentVitality);
+        });
+    });
+    console.log(newArr);
+    return newArr;
+}
 
 // console.assert(liveOrDie(2, true) === true, "If the current target has two living neighbors and is alive, it should return true");
 // console.assert(liveOrDie(3, false) === true, "If the current target has three living neighbors and is dead, it should spawn and return true");console.assert(liveOrDie(4, true) === false, "If the current target has four living neighbors and is alive, it should return false due to overpopulation");
