@@ -19,11 +19,7 @@ var numNeighbors = function (x, y, arr) {
 
 
 var liveOrDie = function (numberOfLivingNeighbors, currentVitality) {
-    if (numberOfLivingNeighbors === 3 || (currentVitality === true && numberOfLivingNeighbors === 2)) {
-        return true;
-   } else {
-       return false;
-   }
+    return numberOfLivingNeighbors === 3 || (currentVitality === true && numberOfLivingNeighbors === 2);
 };
 
 var updateBoard = function (x, y, liveOrDie, newBoard) {
