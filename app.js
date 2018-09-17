@@ -47,14 +47,14 @@ var updateBoard = function (x, y, liveOrDie, newBoard) {
 // };
 
 var game = function(arr) {
-    console.log(arr);
+    // console.log(arr);
     var newArr = arr.map(function(row, y) {
         return row.map(function(currentVitality, x){
             var numberOfLivingNeighbors = numNeighbors(y, x, arr);
             return liveOrDie(numberOfLivingNeighbors, currentVitality);
         });
     });
-    console.log(newArr);
+    // console.log(newArr);
     return newArr;
 }
 
@@ -77,8 +77,118 @@ var arr3 = [[false, false, false, false, false],
 [false, false, true, false, false], 
 [false, false, false, false, false]];
 
+var arr4 = [[false, false, false, false, false, false, false, false, false, false], 
+[false, false, false, false, false, false, false, false, false, false],
+[false, false, false, false, false, false, false, false, false, false],
+[false, false, false, false, false, false, false, false, false, false],
+[false, false, false, false, false, false, false, false, false, false],
+[false, false, false, false, false, false, false, false, false, false],
+[false, false, false, false, false, false, false, false, false, false],
+[false, false, false, false, false, false, false, false, false, false],
+[false, false, false, false, false, false, false, false, false, false],
+[false, false, false, false, false, false, false, false, false, false]];
+
+let setBoard = (rows, columns) => {
+
+}
+
 // console.assert(game(arr1) === arr1, "The board should not change.");
 
 // console.assert(_.isEqual(game(arr2) === arr3), "The current alive target row should rotate.");
 
 game(arr2);
+
+let CtrlButtons = props => (
+    <div>
+        <button onClick={
+            props.updateBoard
+        }>Next</button>
+        <button onClick={
+            props.playBoard
+        }>Play / Pause</button>
+    </div>
+)
+
+let Cell = props => (
+    <div 
+        className={"cell " + (props.cell ? 'cell-alive' : 'cell-dead')}
+        onClick={() => {
+                    props.switchCell(props.iRow, props.iColumn);
+                }
+            }
+    >
+    </div>
+)
+// {props.cell ? 'o' : 'x'}
+
+let Row = props => (
+    <div className="row">{props.row.map((cell, index) => 
+        <Cell cell={cell} iRow={props.iRow} iColumn={index} switchCell={props.switchCell} /> 
+    )}
+    </div>
+)
+
+let Board = props => (
+    <div>
+        {
+            props.board.map((row, index) => 
+                <Row iRow={index} row={row} switchCell={props.switchCell}/>
+        )}
+    </div>
+)
+
+class Homepage extends React.Component {
+    constructor(props) {
+      super(props);
+      this.state = {
+          board: arr4
+      }
+      this.updateBoard = this.updateBoard.bind(this);
+      this.switchCell = this.switchCell.bind(this);
+      this.playBoard = this.playBoard.bind(this);
+    }
+    updateBoard() {
+        this.setState({
+            board: game(this.state.board),
+            playTimer: null
+        })
+    }
+    playBoard() {
+        if (!this.state.playTimer) {
+            this.state.playTimer = setInterval(() => {
+                this.setState({
+                    board: game(this.state.board)
+                })
+            }, 200);
+        } else {
+            clearInterval(this.state.playTimer);
+            this.state.playTimer = null;
+        }
+    }
+    switchCell(iRow, iColumn) {
+        console.log(iRow)
+        console.log(iColumn)
+        let newBoard = _.map(this.state.board, _.clone);
+        newBoard[iRow][iColumn] = !newBoard[iRow][iColumn]
+        this.setState({
+            board: newBoard
+        })
+    }
+    render() {
+        return (
+            <div className="container">
+                <CtrlButtons updateBoard={this.updateBoard} playBoard={this.playBoard}/>
+                <Board board={this.state.board} switchCell={this.switchCell}/>
+            </div>
+        )
+    }
+}
+
+let render = () => {
+    console.log('rendering');
+    ReactDOM.render(
+      <Homepage />, 
+      document.querySelector('.app')
+    );
+  }
+  render();
